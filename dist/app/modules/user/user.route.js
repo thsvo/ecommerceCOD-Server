@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const validateRequest_1 = require("../../middlewares/validateRequest");
+const user_validation_1 = require("./user.validation");
+const user_controller_1 = require("./user.controller");
+const auth_1 = __importDefault(require("../../middlewares/auth"));
+const global_interface_1 = require("../../interface/global/global.interface");
+const upload_1 = require("../upload/upload");
+const router = express_1.default.Router();
+router.post("/auth/register/", upload_1.uploadService.none(), (0, validateRequest_1.validateRequest)(user_validation_1.userValidationSchemas.createUserValidationSchema), user_controller_1.userControllers.createUserController);
+router.post("/auth/login/", (0, validateRequest_1.validateRequest)(user_validation_1.userValidationSchemas.userLoginValidationSchema), user_controller_1.userControllers.loginUserController);
+router.post("/auth/change-password/", (0, auth_1.default)(global_interface_1.UserRole.ADMIN, global_interface_1.UserRole.USER), (0, validateRequest_1.validateRequest)(user_validation_1.userValidationSchemas.changePasswordValidationSchema), user_controller_1.userControllers.changeUserPasswordController);
+router.post("/auth/forgot-password/", (0, auth_1.default)(global_interface_1.UserRole.ADMIN, global_interface_1.UserRole.USER), (0, validateRequest_1.validateRequest)(user_validation_1.userValidationSchemas.forgetPasswordValidationSchema), user_controller_1.userControllers.forgetPasswordController);
+router.post("/auth/reset-password/", (0, auth_1.default)(global_interface_1.UserRole.ADMIN, global_interface_1.UserRole.USER), (0, validateRequest_1.validateRequest)(user_validation_1.userValidationSchemas.resetPasswordValidationSchema), user_controller_1.userControllers.resetPasswordController);
+router.get("/auth/user/", (0, auth_1.default)(global_interface_1.UserRole.ADMIN), user_controller_1.userControllers.getAllUserController);
+router.get("/auth/user/:userId/", user_controller_1.userControllers.getSingleUserController);
+router.patch("/auth/user/status/:userId/", (0, auth_1.default)(global_interface_1.UserRole.ADMIN), user_controller_1.userControllers.updateUserStatusController);
+router.patch("/auth/user/:userId/", user_controller_1.userControllers.updateSingleUserController);
+exports.userRoutes = router;
