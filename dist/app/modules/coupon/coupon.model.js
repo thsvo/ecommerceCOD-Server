@@ -26,19 +26,6 @@ couponSchema.pre("validate", function (next) {
         const randomNumbers = Math.floor(100000 + Math.random() * 900000);
         this.code = `VC-${randomNumbers}`;
     }
-    if (this.type === "percentage") {
-        const amount = parseFloat(this.amount);
-        if (isNaN(amount) || amount < 0 || amount > 100) {
-            return next(new Error("Amount must be a valid percentage between 0 and 100."));
-        }
-        this.amount = `${amount}%`;
-    }
-    else {
-        const fixedAmount = parseFloat(this.amount);
-        if (isNaN(fixedAmount) || fixedAmount < 0) {
-            return next(new Error("Amount must be a valid number."));
-        }
-    }
     next();
 });
 exports.couponModel = (0, mongoose_1.model)("coupon", couponSchema);

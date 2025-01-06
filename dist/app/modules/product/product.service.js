@@ -55,6 +55,10 @@ const getAllProductService = (page, limit, searchText, searchFields) => __awaite
             .populate({
             path: "variants.attributeCombination",
             model: "attributeOption",
+            populate: {
+                path: "attribute",
+                model: "attribute",
+            },
         })
             .sort({ createdAt: -1 })
             .exec();
@@ -149,6 +153,10 @@ const getSingleProductBySlugService = (productSlug) => __awaiter(void 0, void 0,
         .populate({
         path: "variants.attributeCombination",
         model: "attributeOption",
+        populate: {
+            path: "attribute",
+            model: "attribute",
+        },
     })
         .exec();
     if (!result) {
